@@ -1,10 +1,24 @@
-var http = require("http")
+var fs = require("fs")
+  , http = require("http")
+  , https = require("https")
   , express = require("express")
   , app = express()
-  , server = http.createServer(app)
-  , io = require("socket.io").listen(server);
+  , options = {
+      key:  fs.readFileSync('./Authentication/server.key').toString(),
+      cert: fs.readFileSync('./Authentication/server.csr').toString(),
+      // ca: fs.readFileSync('./Authentication/ca.crt').toString(),
+      requestCert: true,
+      rejectUnauthorized: false
+    }
+  , httpServer = http.createServer(app.handle.bind(app)).listen(9128)
+  , httpsSocketIo = require('socket.io').listen(httpServer)
+  , httpsServer = https.createServer(options, app.handle.bind(app)).listen(9129)
+  , httpsSocketIo = require('socket.io').listen(httpsServer);
+//  , server = tls.createServer(app, options)
+//  , io = require("socket.io").listen(server);
 
-server.listen(9128);
+
+// server.listen(9128);
 var sb_sessions = []
   , num_sessions = 0;
 
@@ -13,7 +27,7 @@ app.get('/', function (req, res) {
   res.send('<p class="result">Thank you. Your session key is ' + key + '</p>');
 });
 
-io.sockets.on('connection', function (socket) {
+httpsSocketIo.sockets.on('connection', function (socket) {
 
   console.log('connection opened');
 
@@ -27,7 +41,7 @@ io.sockets.on('connection', function (socket) {
       num_sessions += 1;
       sb_sessions[request_key] = {};
       sb_sessions[request_key].url = '';
-      resp_url = 'http://localhost:9128/?key=' + request_key;
+      resp_url = 'https://10.66.58.34:9129/?key=' + request_key;
       /*
 
       socket.broadcast.emit('url_client_sync', {
@@ -53,6 +67,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('url_server_sync', function (data) {
     key = data.key;
     if (sb_sessions[key]) {
+      if (sb_sessions[key].url == data.session.url) {
+        return;
+      }
       sb_sessions[key].url = data.session.url;
     }
     console.log('url_sync: ');

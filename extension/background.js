@@ -22,7 +22,7 @@ chrome.runtime.onMessage.addListener(
       };
       // now we need to send this data to the server, get a response
       // start a new tab accordingly and sync it up
-      var socket = io.connect('http://localhost:9128');
+      var socket = io.connect('https://10.66.58.34:9129');
 
       socket.emit('first_request', msg, function (key, resp_url) {
         // if hosting, this is the key
