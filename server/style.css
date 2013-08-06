@@ -1,0 +1,27 @@
+html {
+  background: #fff;
+  height: 100%;
+  width: 100%;
+}
+body {
+  font: normal .81em/1.5em Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.logo {
+  font-size: 30px;
+  position: absolute;
+  text-align: left;
+  font-family: 'Nunito', sans-serif;
+  left: 50%;
+  margin-left: -68px;
+  padding:7px;
+}
+#header {
+  background: #415871;
+  color: #FFF;
+  padding: 5px 0 5px 0;
+  height: 32px;
+  position: relative;
+  z-index: 8;
+}

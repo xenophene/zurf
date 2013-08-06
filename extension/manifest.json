@@ -1,0 +1,22 @@
+{
+  "name": "Zurf",
+  "description":  "Social surfing with friends in real-time!",
+  "version":  "0.1",
+  "manifest_version":  3,
+  "minimum_chrome_version": "16.0.884",
+  "background": {
+    "page":  "background.html",
+    "persistent": false
+  },
+  "permissions":  [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action":  {
+    "default_icon": "icon-19.png",
+    "default_title":  "Zurf!",
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": "script-src 'self' http://localhost:9128; object-src 'self'"
+}
