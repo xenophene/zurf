@@ -5,17 +5,14 @@ var socket = io.connect('https://localhost:9129');
 // on every tab creation!
 socket.on('url_client_sync', function (data) {
   // check if the key is mine!
-  console.log(data);
   for (tab_id in tabid_key) {
     if (tabid_key[tab_id] == data.key) {
-      console.log('came in for tab: ' + tab_id);
       chrome.tabs.update(parseInt(tab_id, 10), {url: data.session.url});
     }
   }
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  console.log(tabId);
   if (tabid_key[tab.id] && changeInfo.status == 'complete') {
     socket.emit('url_server_sync', {
       session:  {
@@ -42,11 +39,9 @@ chrome.runtime.onMessage.addListener(
         // if hosting, this is the key
         msg.key = key;
         tabid_key[tab.id] = [key];
-        console.log(msg);
         chrome.tabs.update(tab.id, {url: resp_url});
         
       });
-
     });
   }
 );

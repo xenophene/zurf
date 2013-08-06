@@ -16,11 +16,4 @@ $(function () {
     });
   });
 
-  function byebye() {
-    $('.options').toggle();
-    $('.result').toggle();
-    bgPage = chrome.extension.getBackgroundPage();
-    $('#key').html(bgPage.msg.key);
-  }
-
 });
