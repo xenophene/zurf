@@ -1,10 +1,22 @@
 var tabid_key = {};
+var socket = io.connect('https://localhost:9129');
+
+// this function is global since it should not be overwritten
+// on every tab creation!
+socket.on('url_client_sync', function (data) {
+  // check if the key is mine!
+  console.log(data);
+  for (tab_id in tabid_key) {
+    if (tabid_key[tab_id] == data.key) {
+      console.log('came in for tab: ' + tab_id);
+      chrome.tabs.update(parseInt(tab_id, 10), {url: data.session.url});
+    }
+  }
+});
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   console.log(tabId);
-  if (tabid_key[tab.id] && tabid_key[tab.id][1] && changeInfo.status == 'complete') {
-    //var socket = tabid_key[1];
-    var socket = tabid_key[tab.id][1];
+  if (tabid_key[tab.id] && changeInfo.status == 'complete') {
     socket.emit('url_server_sync', {
       session:  {
         url:  tab.url
@@ -23,25 +35,16 @@ chrome.runtime.onMessage.addListener(
       };
       // now we need to send this data to the server, get a response
       // start a new tab accordingly and sync it up
-      var socket = io.connect('https://10.66.58.34:9129');
+      //var socket = io.connect('https://10.66.58.34:9129');
+      
 
       socket.emit('first_request', msg, function (key, resp_url) {
         // if hosting, this is the key
         msg.key = key;
-        tabid_key[tab.id] = [key, socket];
+        tabid_key[tab.id] = [key];
         console.log(msg);
         chrome.tabs.update(tab.id, {url: resp_url});
         
-      });
-
-      // now we set up a listener for url_sync, which we get
-      // from the server
-      socket.on('url_client_sync', function (data) {
-        // check if the key is mine!
-        console.log(data);
-        if (data.key == msg.key) {
-          chrome.tabs.update(tab.id, {url: data.session.url});
-        }
       });
 
     });
