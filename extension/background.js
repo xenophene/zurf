@@ -1,6 +1,7 @@
 var tabid_key = {};
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  console.log(tabId);
   if (tabid_key[tab.id] && tabid_key[tab.id][1] && changeInfo.status == 'complete') {
     //var socket = tabid_key[1];
     var socket = tabid_key[tab.id][1];
