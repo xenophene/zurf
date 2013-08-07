@@ -41,8 +41,8 @@ httpsSocketIo.sockets.on('connection', function (socket) {
       num_sessions += 1;
       sb_sessions[request_key] = {};
       sb_sessions[request_key].url = '';
-      //resp_url = 'https://10.66.58.34:9129/?key=' + request_key;
-      resp_url = 'https://localhost:9129/?key=' + request_key;
+      resp_url = 'https://10.66.59.129:9129/?key=' + request_key;
+      //resp_url = 'https://localhost:9129/?key=' + request_key;
       /*
 
       socket.broadcast.emit('url_client_sync', {
@@ -61,8 +61,6 @@ httpsSocketIo.sockets.on('connection', function (socket) {
       */
     }
     fn(request_key, resp_url);
-    console.log('first_request: ');
-    console.log(data);
   });
 
   socket.on('url_server_sync', function (data) {

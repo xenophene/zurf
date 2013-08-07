@@ -1,5 +1,5 @@
 var tabid_key = {};
-var socket = io.connect('https://localhost:9129');
+var socket = io.connect('https://10.66.59.129:9129');
 
 // this function is global since it should not be overwritten
 // on every tab creation!
