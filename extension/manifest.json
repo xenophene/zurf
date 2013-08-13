@@ -18,5 +18,5 @@
     "default_title":  "Zurf!",
     "default_popup": "popup.html"
   },
-  "content_security_policy": "script-src 'self' https://10.66.59.129:9129; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://zurf-8724.onmodulus.net; object-src 'self'"
 }

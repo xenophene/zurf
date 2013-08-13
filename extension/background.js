@@ -1,5 +1,6 @@
 var tabid_key = {};
-var socket = io.connect('https://10.66.59.129:9129');
+//var socket = io.connect('https://localhost:9129');
+var socket = io.connect('https://zurf-8724.onmodulus.net');
 
 // this function is global since it should not be overwritten
 // on every tab creation!
@@ -13,7 +14,7 @@ socket.on('url_client_sync', function (data) {
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (tabid_key[tab.id] && changeInfo.status == 'complete') {
+  if (tabid_key[tab.id] && changeInfo.status == 'loading') {
     socket.emit('url_server_sync', {
       session:  {
         url:  tab.url

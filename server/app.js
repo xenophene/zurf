@@ -10,14 +10,14 @@ var fs = require("fs")
       requestCert: true,
       rejectUnauthorized: false
     }
-  , httpServer = http.createServer(app.handle.bind(app)).listen(9128)
-  , httpsSocketIo = require('socket.io').listen(httpServer)
-  , httpsServer = https.createServer(options, app.handle.bind(app)).listen(9129)
-  , httpsSocketIo = require('socket.io').listen(httpsServer);
-//  , server = tls.createServer(app, options)
-//  , io = require("socket.io").listen(server);
+    , httpServer = http.createServer(app.handle.bind(app)).listen(process.env.PORT)
+    , httpSocketIo = require('socket.io').listen(httpServer)
+   //, httpsServer = https.createServer(options, app.handle.bind(app)).listen(process.env.PORT)
+   //, httpsSocketIo = require('socket.io').listen(httpsServer);
+  //, server = tls.createServer(app, options)
+  //, io = require("socket.io").listen(server);
 
-
+console.log(process.env.PORT);
 // server.listen(9128);
 var sb_sessions = []
   , num_sessions = 0;
@@ -27,11 +27,12 @@ app.get('/', function (req, res) {
   res.send('<p class="result">Thank you. Your session key is ' + key + '</p>');
 });
 
-httpsSocketIo.sockets.on('connection', function (socket) {
+httpSocketIo.sockets.on('connection', function (socket) {
 
   console.log('connection opened');
 
   socket.on('first_request', function (data, fn) {
+    console.log(data);
     var request_type = data.type
       , request_key = data.key
       , resp_url;
@@ -41,7 +42,7 @@ httpsSocketIo.sockets.on('connection', function (socket) {
       num_sessions += 1;
       sb_sessions[request_key] = {};
       sb_sessions[request_key].url = '';
-      resp_url = 'https://10.66.59.129:9129/?key=' + request_key;
+      resp_url = 'https://zurf-8724.onmodulus.net?key=' + request_key;
       //resp_url = 'https://localhost:9129/?key=' + request_key;
       /*
 
